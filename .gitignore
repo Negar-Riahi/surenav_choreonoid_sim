@@ -1,0 +1,68 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Personal Projects
+ext/Wheeled_Biped/**
+ext/Wheeled_Biped/*
+ext/Wheeled_Biped/
+ext/my_controllers/**
+ext/my_controllers/*
+
+# visual studio config
+.vscode/*
+
+# choreonoid build files
+bin/*
+CMakeCache.txt
+CMakeFiles/*
+CMakeLists.txt
+CONTRIBUTORS
+CPackConfig.cmake
+CPackSourceConfig.cmake
+INSTALL
+LICENSE
+Makefile
+NEWS
+bin/*
+circle.yml
+cmake_install.cmake
+doc/*
+include/*
+lib/
+misc/*
+package.xml
+sample/*
+src/*
+thirdparty/*
+
+
