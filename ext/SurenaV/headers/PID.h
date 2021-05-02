@@ -11,9 +11,13 @@ class PID{
         PID(double kp, double ki, double kd);
 
     private:
+        // Controller Gains 
         double kp_;
         double ki_;
         double kd_;
 
-        
+        double prevoiusError;   // Controller Previous Error
+        double intI;            // Controller Integrator
+
+        double getOutput(double deiredValue, double currentValue);
 };
