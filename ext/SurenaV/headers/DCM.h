@@ -16,9 +16,13 @@
 using namespace Eigen;
 using namespace std;
 
+
+const double K_G = 9.81;
+
 class DCMPlanner{
+    friend class Surena;
     public:
-        DCMPlanner(double deltaZ, double stepTime, double doubleSupportTime, double alpha, double dt, int stepCount);
+        DCMPlanner(double deltaZ, double stepTime, double doubleSupportTime, double dt, int stepCount = 6, double alpha = 0.5);
         void setFoot(Vector3d rF[]);
         Vector3d* getXiTrajectory();
         Vector3d* getXiDot();
@@ -30,14 +34,20 @@ class DCMPlanner{
         double tDS_;
         double alpha_;
 
+        double dt_;         // sampling time
+        int stepCount_;     // trajectories will be generated over how many steps
+
         // Trajectory Arrays
         Vector3d* xi_;
         Vector3d* xiDot_;
         Vector3d* COM_;
         Vector3d* ZMP_;
 
+        Vector3d* rF_;
+        //Vector3d* rVRP_;
+
         // Functions for generating trajectories
-        Vector3d* updateVRP(Vector3d rF[], int count);
+        Vector3d* updateVRP(Vector3d rF[]);
         Vector3d* addDS();
-        Vector3d* updateXi();
+        Vector3d* updateXiEoS(Vector3d rVRP[]);
 };
