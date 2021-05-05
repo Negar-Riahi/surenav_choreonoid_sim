@@ -16,10 +16,12 @@ class PID{
         double ki_;
         double kd_;
 
+
         double dt_;
 
-        double prevoiusError;   // Controller Previous Error
-        double intI;            // Controller Integrator
+        double prevoiusError_;   // Controller Previous Error
+        double intI_;            // Controller Integrator
+
 
         double getOutput(double deiredValue, double currentValue);
 };
