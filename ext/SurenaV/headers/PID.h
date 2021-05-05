@@ -18,8 +18,8 @@ class PID{
 
         double dt_;
 
-        double prevoiusError;   // Controller Previous Error
-        double intI;            // Controller Integrator
+        double prevoiusError_;   // Controller Previous Error
+        double intI_;            // Controller Integrator
 
         double getOutput(double deiredValue, double currentValue);
 };

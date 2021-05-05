@@ -24,7 +24,7 @@ class DCMPlanner{
     public:
         DCMPlanner(double deltaZ, double stepTime, double doubleSupportTime, double dt, int stepCount = 6, double alpha = 0.5);
         void setFoot(Vector3d rF[]);
-        Vector3d* getXiTrajectory();
+        Vector3d* getXiTrajectory(Vector3d VRP[], Vector3d xiEOS[]);
         Vector3d* getXiDot();
 
     private:
