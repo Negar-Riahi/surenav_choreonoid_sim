@@ -8,7 +8,7 @@
 
 class PID{
     public:
-        PID(double kp, double ki, double kd);
+        PID(double kp, double ki, double kd, double timeStep);
 
     private:
         // Controller Gains 
@@ -16,8 +16,12 @@ class PID{
         double ki_;
         double kd_;
 
+
+        double dt_;
+
         double prevoiusError_;   // Controller Previous Error
         double intI_;            // Controller Integrator
+
 
         double getOutput(double deiredValue, double currentValue);
 };

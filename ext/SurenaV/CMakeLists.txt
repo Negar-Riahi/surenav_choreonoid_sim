@@ -16,4 +16,4 @@ set(headers
 
 )
 
-#add_cnoid_simple_controller(Surenaoffline sources/main.cpp ${sources}  ${headers})
+add_cnoid_simple_controller(Surenaoffline sources/main.cpp ${sources}  ${headers})
