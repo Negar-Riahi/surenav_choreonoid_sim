@@ -29,7 +29,7 @@ Vector3d* DCMPlanner::getXiTrajectory(){
     this->updateVRP();
     this->updateXiEoS();
     this->updateSS();
-    //this->updateXiDSPositions();
+    this->updateXiDSPositions();
     return xi_;
 }
 
@@ -47,9 +47,9 @@ Vector3d* DCMPlanner::getCoM(Vector3d COM_0){
     int length = tStep_ * stepCount_ / dt_;
     for (int i = 0; i < length; i++){
         Vector3d inte = Vector3d::Zero(3);
-        for (int j = 0; j < i; j++)
-            inte += dt_ * xi_[j] * exp(dt_/sqrt(deltaZ_/K_G));
-        COM_[i] = (inte/sqrt(deltaZ_/K_G)) + COM_0 * exp(-i*dt_/sqrt(deltaZ_/K_G));
+        for(int j = 0; j < i ; j ++)
+            inte += sqrt(K_G/deltaZ_) * xi_[j] * exp(j * dt_ * sqrt(K_G/deltaZ_)) * dt_;
+        COM_[i] = (inte + COM_0) * exp(-i*dt_*sqrt(K_G/deltaZ_));
     }
     return COM_;
 }
@@ -89,7 +89,7 @@ void DCMPlanner::updateXiDSPositions(){
             xi_dot_i = (xiDSI_[step] - xi_[0]) * sqrt(K_G / deltaZ_);
             xi_dot_e = (xiDSE_[step] - rVRP_[0]) * sqrt(K_G / deltaZ_);
             Vector3d* coefs = this->minJerkInterpolate(xiDSI_[step],xiDSE_[step],xi_dot_i, xi_dot_e, tDS_);
-            for (int i = 0; i < (1/dt_) * tDS_ * (1-alpha_); ++i){
+            for (int i = 0; i < (1/dt_) * tDS_ * (alpha_); ++i){
                 double time = dt_ * i;
                 xi_[i] = coefs[0] + coefs[1] * time + coefs[2] * pow(time,2) + coefs[3] * pow(time,3);
             }          
@@ -99,7 +99,7 @@ void DCMPlanner::updateXiDSPositions(){
             xi_dot_e = (xiDSE_[step] - rVRP_[step]) * sqrt(K_G/deltaZ_);
             Vector3d* coefs = this->minJerkInterpolate(xiDSI_[step],xiDSE_[step],xi_dot_i, xi_dot_e, tDS_);
             for (int i = (tStep_ * step)/dt_ - (tDS_ * alpha_ / dt_ ); i < (1/dt_) * tDS_ * -alpha_; ++i){
-                double time = i * dt_;
+                double time = fmod(i * dt_,tStep_);
                 xi_[i] = coefs[0] + coefs[1] * time + coefs[2] * pow(time,2) + coefs[3] * pow(time,3);
             }
         }   
@@ -119,8 +119,8 @@ void DCMPlanner::updateDS(){
             xiDSE_[index] = rVRP_[index] + exp(sqrt(K_G/deltaZ_) * tDS_ * (1 - alpha_)) * (xi_[0] - rVRP_[index]);
         }
         else{
-            xiDSI_[index] = rVRP_[index-1] + exp(-sqrt(K_G/deltaZ_) * tDS_ * alpha_) * (xi_[index-1] - rVRP_[index-1]);
-            xiDSE_[index] = rVRP_[index] + exp(sqrt(K_G/deltaZ_) * tDS_ * (1 - alpha_)) * (xi_[index-1] - rVRP_[index]);
+            xiDSI_[index] = rVRP_[index-1] + exp(-sqrt(K_G/deltaZ_) * tDS_ * alpha_) * (xiEOS_[index-1] - rVRP_[index-1]);
+            xiDSE_[index] = rVRP_[index] + exp(sqrt(K_G/deltaZ_) * tDS_ * (1 - alpha_)) * (xiEOS_[index-1] - rVRP_[index]);
         }
     }
 }
@@ -136,7 +136,7 @@ void DCMPlanner::updateXiEoS(){
     }
 }
 
-Vector3d* minJerkInterpolate(Vector3d theta_ini, Vector3d theta_f, Vector3d theta_dot_ini, Vector3d theta_dot_f, double tf){
+Vector3d* DCMPlanner::minJerkInterpolate(Vector3d theta_ini, Vector3d theta_f, Vector3d theta_dot_ini, Vector3d theta_dot_f, double tf){
     /* 
         Returns Cubic Polynomial with the Given Boundary Conditions
         https://www.tu-chemnitz.de/informatik//KI/edu/robotik/ws2016/lecture-tg%201.pdf
