@@ -44,9 +44,11 @@ Vector3d* DCMPlanner::getXiDot(){
 }
 
 Vector3d* DCMPlanner::getCoM(Vector3d COM_0){
-    int length = tStep_ * stepCount_ / dt_;
+    int length = 1/dt_ * tStep_ * stepCount_;
+    COM_ = new Vector3d[length];
+    Vector3d inte;
     for (int i = 0; i < length; i++){
-        Vector3d inte = Vector3d::Zero(3);
+        inte << 0.0,0.0,0.0;
         for(int j = 0; j < i ; j ++)
             inte += sqrt(K_G/deltaZ_) * xi_[j] * exp(j * dt_ * sqrt(K_G/deltaZ_)) * dt_;
         COM_[i] = (inte + COM_0) * exp(-i*dt_*sqrt(K_G/deltaZ_));
