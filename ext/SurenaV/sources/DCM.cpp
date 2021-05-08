@@ -17,8 +17,7 @@ DCMPlanner::DCMPlanner(double deltaZ, double stepTime, double doubleSupportTime,
 }
 
 void DCMPlanner::setFoot(Vector3d rF[]){
-    int length = sizeof(rF) / sizeof(rF[0]);
-    rF_ = new Vector3d[length];
+    rF_ = new Vector3d[stepCount_];
     rF_ = rF;
 }
 
@@ -30,7 +29,7 @@ Vector3d* DCMPlanner::getXiTrajectory(){
     this->updateVRP();
     this->updateXiEoS();
     this->updateSS();
-    this->updateXiDSPositions();
+    //this->updateXiDSPositions();
     return xi_;
 }
 
@@ -57,22 +56,23 @@ Vector3d* DCMPlanner::getCoM(Vector3d COM_0){
 
 void DCMPlanner::updateVRP(){
     // Updates Virtual Repelant Points !! should be called after setFoot() !!
-    Vector3d* VRP = new Vector3d[this->stepCount_];
+    rVRP_ = new Vector3d[this->stepCount_];
     Vector3d deltaZ(0.0,0.0,deltaZ_);
     for (int i = 0 ; i < this->stepCount_; i ++)
-        VRP[i] = rF_[i] + deltaZ;
+        rVRP_[i] = rF_[i] + deltaZ;
 }
 
 void DCMPlanner::updateSS(){
     // Generates DCM trajectory without Double Support Phase
     int length = 1/dt_ * tStep_ * stepCount_;
     xi_ = new Vector3d[length];
-    int iter, stepNum;
+    int stepNum;
+    double time;
 
-    for (double time = 0 ; time < stepCount_ * tStep_ ; time += dt_){
-        stepNum = fmod(time, tStep_);
-        iter = time / tStep_;
-        xi_[iter] = rVRP_[iter] + exp(sqrt(K_G/deltaZ_) * (time = tStep_)) * (xiEOS_[iter] - rVRP_[iter]);
+    for (int i = 0; i < length; i ++){
+        time = dt_ * i;
+        stepNum = int(time)/int(tStep_);
+        xi_[i] = rVRP_[stepNum] + exp(sqrt(K_G/deltaZ_) * (fmod(time,tStep_) - tStep_)) * (xiEOS_[stepNum] - rVRP_[stepNum]);
     }
 }
 
