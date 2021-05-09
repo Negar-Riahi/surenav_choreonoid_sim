@@ -22,6 +22,5 @@ class PID{
         double prevoiusError_;   // Controller Previous Error
         double intI_;            // Controller Integrator
 
-
         double getOutput(double deiredValue, double currentValue);
 };
