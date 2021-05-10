@@ -22,8 +22,8 @@ class Robot{
         PID* DCMController_;
         PID* CoMController_;
 
-        void doIK(Vector3d pelvisP, Vector3d pelvisR, Vector3d leftAnkleP, Vector3d leftAnkleR, Vector3d rightAnkleP, Vector3d rightAnkleR);
-        double* geometricIK(Vector3d p1, Matrix3d r1, Vector3d p7, Matrix3d r7, bool isLeft);
+        void doIK(MatrixXd pelvisP, Matrix3d pelvisR, MatrixXd leftAnkleP, Matrix3d leftAnkleR, MatrixXd rightAnkleP, Matrix3d rightAnkleR);
+        double* geometricIK(MatrixXd p1, MatrixXd r1, MatrixXd p7, MatrixXd r7, bool isLeft);
 
         Matrix3d Rroll(double phi);
         Matrix3d RPitch(double theta);
