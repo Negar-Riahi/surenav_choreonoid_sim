@@ -74,7 +74,7 @@ vector<double> Robot::spinOffline(){
     // Hope it goes well in simulation
 }
 
-void Robot::doIK(Vector3d pelvisP, Vector3d pelvisR, Vector3d leftAnkleP, Vector3d leftAnkleR, Vector3d rightAnkleP, Vector3d rightAnkleR){
+void Robot::doIK(MatrixXd pelvisP, Matrix3d pelvisR, MatrixXd leftAnkleP, Matrix3d leftAnkleR, MatrixXd rightAnkleP, Matrix3d rightAnkleR){
     // Calculates and sets Robot Leg Configuration at each time step
     double* q_left = this->geometricIK(pelvisP, pelvisR, leftAnkleP, leftAnkleR, true);
     double* q_right = this->geometricIK(pelvisP, pelvisR, rightAnkleP, rightAnkleR, false);
@@ -103,7 +103,7 @@ Matrix3d Robot::RPitch(double theta){
 
 }
 
-double* Robot::geometricIK(Vector3d p1, Matrix3d r1, Vector3d p7, Matrix3d r7, bool isLeft){
+double* Robot::geometricIK(MatrixXd p1, MatrixXd r1, MatrixXd p7, MatrixXd r7, bool isLeft){
     /*
         Geometric Inverse Kinematic for Robot Leg (Section 2.5  Page 53)
         Reference: Introduction to Humanoid Robotics by Kajita        https://www.springer.com/gp/book/9783642545351
