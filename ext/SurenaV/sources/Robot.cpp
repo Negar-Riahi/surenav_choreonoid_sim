@@ -111,12 +111,12 @@ double* Robot::geometricIK(MatrixXd p1, MatrixXd r1, MatrixXd p7, MatrixXd r7, b
    double a = joints_[3].length_;
    double b = joints_[4].length_;
    double* q = new double[6];
-   Vector3d D;
+   MatrixXd D(3,1);
    if (isLeft)
         D << 0.0,-joints_[0].length_,0.0;
     else
         D << 0.0,joints_[0].length_,0.0;
-   Vector3d r = r7.transpose() * (p1 + r1 * D - p7);
+    MatrixXd r = r7.transpose() * (p1 + r1 * D - p7);
    double C = r.norm();
    double c5 = (pow(C,2) - pow(a,2) - pow(b,2)/(2 * a * b));
    if (c5 >= 1)
@@ -126,15 +126,15 @@ double* Robot::geometricIK(MatrixXd p1, MatrixXd r1, MatrixXd p7, MatrixXd r7, b
     else
         q[3] = acos(c5);       // Knee Pitch
     double q6a = asin((a/C) * sin(M_PI - q[3]));
-    q[5] = atan2(r(1),r(2));   //Ankle Roll
+    q[5] = atan2(r(1,0),r(2,0));   //Ankle Roll
     if (q[5] > M_PI/2) 
         q[5] = q[5] - M_PI;
     else if (q[5] < -1*M_PI / 2)
         q[5] = q[5] + M_PI;
     int sign_r2 = 1;
-    if(r(2) < 0)
+    if(r(2,0) < 0)
         sign_r2 = -1;
-    q[4] = -atan2(r(0),sign_r2 * sqrt(pow(r(1),2) + pow(r(2),2))) - q6a;      // Ankle Pitch
+    q[4] = -atan2(r(0,0),sign_r2 * sqrt(pow(r(1,0),2) + pow(r(2,0),2))) - q6a;      // Ankle Pitch
     Matrix3d R = r1.transpose() * r7 * (Rroll(-q[5]),RPitch(-q[3] - q[4]));
     q[0] = atan2(-R(0,1),R(1,1));         // Hip Yaw
     q[1] = atan2(R(2,1), -R(0,1) * sin(q[0]) + R(1,1) * cos(q[0]));           // Hip Roll
