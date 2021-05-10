@@ -10,8 +10,6 @@ class Robot{
     public:
         Robot();
 
-        void createLinkTree();
-
         vector<double> spinOnline(VectorXd forceSensor, Vector3d gyro, Vector3d accelerometer, double time);
         vector<double> spinOffline();
 
@@ -19,21 +17,14 @@ class Robot{
 
         DCMPlanner* trajectoryPlanner_;
 
-        _Link* pelvis_;
-        _Link* rightHipRoll_;
-        _Link* rightHipPitch_;
-        _Link* rightHipYaw_;
-        _Link* rightKnee_;
-        _Link* rightAnklePitch_;
-        _Link* rightAnkleRoll_;
-
-        _Link* lefttHipRoll_;
-        _Link* leftHipPitch_;
-        _Link* leftHipYaw_;
-        _Link* leftKnee_;
-        _Link* leftAnklePitch_;
-        _Link* leftAnkleRoll_;
+        vector<_Link> joints_;
 
         PID* DCMController_;
         PID* CoMController_;
+
+        void doIK(Vector3d pelvisP, Vector3d pelvisR, Vector3d leftAnkleP, Vector3d leftAnkleR, Vector3d rightAnkleP, Vector3d rightAnkleR);
+        double* geometricIK(Vector3d p1, Matrix3d r1, Vector3d p7, Matrix3d r7, bool isLeft);
+
+        Matrix3d Rroll(double phi);
+        Matrix3d RPitch(double theta);
 };
