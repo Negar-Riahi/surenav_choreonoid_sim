@@ -7,9 +7,19 @@
 using namespace std;
 using namespace cnoid;
 
-const double pgain[] = {35.0, 22.0, 0.0, 35.0, 22.0, 0.0};
-
-const double dgain[] = {1.7,2.0,0.0,1.7,2.0,0.0};
+const double pgain[] = {
+    8000.0, 8000.0, 8000.0, 8000.0, 8000.0, 8000.0,
+    3000.0, 3000.0, 3000.0, 3000.0, 3000.0, 3000.0, 3000.0, 
+    8000.0, 8000.0, 8000.0, 8000.0, 8000.0, 8000.0,
+    3000.0, 3000.0, 3000.0, 3000.0, 3000.0, 3000.0, 3000.0, 
+    8000.0, 8000.0, 8000.0 };
+    
+const double dgain[] = {
+    100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
+    100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
+    100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
+    100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0,
+    100.0, 100.0, 100.0 };
 
 class Surena: public SimpleController{
 
@@ -17,20 +27,17 @@ public:
     BodyPtr ioBody;
     double dt;
 
-    AccelerationSensor* accelSensor;
-    RateGyroSensor* gyro;
+    vector<double> qref;
+    vector<double> qold;
 
     Robot* surena;
-
-    Vector3d dv;
-    Vector3d attitude;
 
     virtual bool initialize(SimpleControllerIO* io) override{
         
         ioBody = io->body();
         dt = io->timeStep();
 
-        surena = new Robot();
+        surena = new Robot;
 
         accelSensor = ioBody->findDevice<AccelerationSensor>("WaistAccelSensor");
         io->enableInput(accelSensor);
@@ -41,35 +48,46 @@ public:
             Link* joint = ioBody->joint(i);
             joint->setActuationMode(Link::JOINT_TORQUE);
             io->enableIO(joint);
+            qref.push_back(joint->q());
         }
-        
-        //////////////////// Test !! Do not commit!!/////////////
-        DCMPlanner temp(0.8,0.8,0.3,0.01,7);
-        Vector3d* f = new Vector3d[6];
-        f[0] << 0.0, 0.115, 0.0;
-        f[1] << 0.0,-0.115,0.0;
-        f[2] << 0.5,0.115,0.0;
-        f[3] << 1.0,-0.115,0.0;
-        f[4] << 1.5,0.115,0.0;
-        f[5] << 2.0,-0.115,0.0;
-        f[6] << 2.5, 0.115, 0.0;
+        qold = qref;
 
-        temp.setFoot(f);
-        Vector3d* vrp = temp.updateVRP(f);
-        //cout << vrp[4] << endl;
-        Vector3d* xi_eos = temp.updateXiEoS(vrp);
-        cout << xi_eos[0] << "\n----------\n" << xi_eos[1] << "\n----------\n"<< xi_eos[2] << "\n----------\n"<< xi_eos[3] << "\n----------\n" << xi_eos[4] << "\n----------\n" << xi_eos[5] << "\n----------\n" << xi_eos[6] << endl;
-        ///////////////////////////////////////////////////////////
+        simTime_ = 0.0;
+        simIterator_ = 0;
+
         return true;
     }
 
     virtual bool control() override{
         dv = accelSensor->dv();
         attitude = gyro->w();
+
+        // Set Motor Angles
+        qref = surena->spinOffline();
+        //cout << qref[0] << " " << qref[1] << " " << qref[2] << " " << qref[3] << " " << qref[4] << " " << qref[5] << " " << endl;
+        //cout << qref[13] << " " << qref[14] << " " << qref[15] << " " << qref[16] << " " << qref[17] << " " << qref[18] << " " << endl;
+        // Send Motor Commands to Body
+        for(int i=0; i < 29; ++i){
+            Link* joint = ioBody->joint(i);
+            double q = joint->q();
+            double dq = (q - qold[i]) / dt;
+            double u = (qref[i] - q) * pgain[i] + (0.0 - dq) * dgain[i];
+            qold[i] = q;
+            joint->u() = u;
+        }
+        simIterator_ ++;
+        simTime_ += dt;
         return true;
     }
 private:
 
+    AccelerationSensor* accelSensor;
+    RateGyroSensor* gyro;
+
+    Vector3d dv;
+    Vector3d attitude;
+    double simTime_;
+    int simIterator_;
 };
 
 CNOID_IMPLEMENT_SIMPLE_CONTROLLER_FACTORY(Surena)

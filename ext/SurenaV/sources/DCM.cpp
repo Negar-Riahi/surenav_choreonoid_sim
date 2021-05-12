@@ -13,7 +13,7 @@ DCMPlanner::DCMPlanner(double deltaZ, double stepTime, double doubleSupportTime,
         this->stepCount_ = stepCount;
     else
         throw "at least 4 steps is needed for trajectory generator";
-
+    cout << "DCMPlanner Object created" << endl;
 }
 
 void DCMPlanner::setFoot(Vector3d rF[]){

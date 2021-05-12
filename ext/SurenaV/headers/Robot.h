@@ -7,6 +7,7 @@
 using namespace std;
 
 class Robot{
+    friend class Surena;
     public:
         Robot();
 
