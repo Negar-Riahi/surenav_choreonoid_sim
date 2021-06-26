@@ -1,0 +1,531 @@
+format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: degree
+name: SURENA IV
+rootLink: WAIST
+
+appearances:
+  - &BLUE
+    material:
+      diffuseColor: [ 0.3, 0.3, 0.8 ]
+      specularColor: [ 0.2, 0.2, 0.t ]
+      shininess: 0.2
+  - &DARKGRAY
+    material:
+      diffuseColor: [ 0.5, 0.5, 0.5 ]
+      specularColor: [ 0.3, 0.3, 0.3 ]
+      shininess: 0.2
+  - &RED
+    material:
+      diffuseColor: [ 0.6, 0.3, 0.3 ]
+      specularColor: [ 0.4, 0.2, 0.2 ]
+      shininess: 0.06
+  - &GRAY
+    material:
+      diffuseColor: [ 0.8, 0.8, 0.8 ]
+      specularColor: [ 0.1, 0.1, 0.1 ]
+      shininess: 0.3
+
+links:
+  -
+    name: WAIST
+    jointType: free
+    translation: [ 0, 0, 0.964 ]
+    centerOfMass: [ 0.022242,0.0000423,0.027745 ]
+    mass: 3.37
+    inertia: [
+      0.05560, 0.0000136, 0.0011168,
+      0.0000136,0.02747,0.00000555,
+      0.0011168,0.00000555,0.04564
+      ]
+    elements:
+      Shape:
+        geometry: { type: Resource, uri: "meshes/pelvis.STL" }
+        appearance: *DARKGRAY
+
+  -
+    name: roll link_L
+    parent: WAIST
+    translation : [ 0, 0.10855, 0 ]
+    jointId: 13
+    jointType: revolute
+    jointAxis: X
+    jointRange: [ -45, +45]
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 0.01075
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    elements:
+      Transform:
+        rotation: [ 0, 0, 1, 90 ]
+        elements:
+          Shape:
+            geometry: { type: Cylinder, radius: 0.05, height: 0.1 }
+        appearance: *DARKGRAY
+
+  -
+  
+    name: pitch link_L
+    parent: roll link_L
+    jointId: 14
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ -90, +90 ]
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 0.01075
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    elements:
+      Transform:
+        rotation: [ 0, 1, 0, 90 ]
+        elements:
+          Shape:
+            geometry: { type: Cylinder, radius: 0.05, height: 0.1 }
+        appearance: *DARKGRAY
+  -
+    name: THIGH_L
+    parent: pitch link_L
+    translation : [ 0, 0, -0.134]
+    jointId: 15
+    jointType: revolute
+    jointAxis: Z
+    jointRange: [ -60, 60]
+    centerOfMass: [ 0.00053816, 0.004909569, -0.1192339 ]
+    mass: 0.947373
+    inertia: [
+      0.01802733,-0.00000546,-0.0013948,
+      -0.00000546,0.01748423,0.00004298,
+      -0.0013948,0.00004298,0.00293150
+      ]
+    elements:
+      Shape:
+        geometry: { type: Resource, uri: "meshes/Thigh-Left.STL" }
+        appearance: *DARKGRAY
+  -
+
+    name: SHANK_L
+    parent: THIGH_L
+    translation : [ 0, 0, -0.370]
+    jointId: 16
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ 0, 90]
+    centerOfMass: [ -0.00529630, -0.0080328, -0.10814047  ]
+    mass: 1.29216874
+    inertia: [
+    0.01880541,-0.00002090,0.00088186,
+    -0.00002090,0.01858456,-0.00024344,
+    0.00088186,-0.00024344,0.00352415
+      ]
+    elements:
+      Shape:
+        geometry: { type: Resource, uri: "meshes/Shank-Left.STL" }
+        appearance: *DARKGRAY
+  -
+  
+    name: FOOT link_L
+    parent: SHANK_L
+    translation : [ 0, 0, -0.360 ]
+    jointId: 17
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ -45, +45 ]
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 0.00075
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    elements:
+      Transform:
+        rotation: [ 0, 1, 0, 90 ]
+        elements:
+          Shape:
+            geometry: { type: Cylinder, radius: 0.05, height: 0.1 }
+        appearance: *DARKGRAY
+  -
+    name: FOOT_L
+    parent: FOOT link_L
+    translation : [ 0, 0, 0]
+    jointId: 18
+    jointType: revolute
+    jointAxis: X
+    jointRange: [ -45, 45]
+    centerOfMass: [ -0.00988046,0.00007018,-0.00984470 ]
+    mass: 0.317276
+    inertia: [
+      0.00042135,-0.00000355,-0.00001115,
+     -0.00000355,0.00055372,-0.00000053,
+      -0.00001115,-0.00000053,0.00054913
+      
+      
+       ]
+    elements:
+      Shape:
+        geometry: { type: Resource, uri: "meshes/Foot-Left.STL" }
+        appearance: *DARKGRAY
+  - 
+
+    name: roll link_R
+    parent: WAIST
+    translation : [ 0, -0.10855, 0 ]
+    jointId: 0
+    jointType: revolute
+    jointAxis: X
+    jointRange: [ -45, 45 ]
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 0.01075
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    elements:
+      Transform:
+        rotation: [ 0, 0, 1, 90 ]
+        elements:
+          Shape:
+            geometry: { type: Cylinder, radius: 0.05, height: 0.1 }
+        appearance: *DARKGRAY
+
+  -
+    name: pitch link_R
+    parent: roll link_R
+    jointId: 1
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ -90, +90 ]
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 0.01075
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    elements:
+      Transform:
+        rotation: [ 0, 1, 0, 90 ]
+        elements:
+          Shape:
+            geometry: { type: Cylinder, radius: 0.05, height: 0.1 }
+        appearance: *DARKGRAY
+  -
+    name: THIGH_R
+    parent: pitch link_R
+    translation : [ 0, 0, -0.134]
+    jointId: 2
+    jointType: revolute
+    jointAxis: Z
+    jointRange: [ -60, 60]
+    centerOfMass: [ 0.00046405,0.00492019,-0.11923837 ]
+    mass: 0.9474
+    inertia: [
+      0.01802493,0.00000614,-0.00014414,
+      0.00000614,0.01748172,-0.00004284,
+      -0.00014414,-0.00004284,0.00293149
+      ]
+    elements:
+      Shape:
+        geometry: { type: Resource, uri: "meshes/Thigh-Right.STL" }
+        appearance: *DARKGRAY
+  -
+
+    name: SHANK_R
+    parent: THIGH_R
+    translation : [ 0, 0, -0.370]
+    jointId: 3
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ 0, 90]
+    centerOfMass: [-0.00536716,0.00080464,-0.10817909 ]
+    mass: 1.2921
+    inertia: [
+      0.01879723,0.00001685,0.00087858,
+      0.00001685,0.1857616,0.00024204,
+      0.00087858,0.00024204,0.00352403
+      ]
+    elements:
+      Shape:
+        geometry: { type: Resource, uri: "meshes/Shank-Left.STL" }
+        appearance: *DARKGRAY
+  -
+  
+    name: FOOT link_R
+    parent: SHANK_R
+    translation : [ 0, 0, -0.360 ]
+    jointId: 4
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ -45, 45 ]
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 0.00075
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    elements:
+      Transform:
+        rotation: [ 0, 1, 0, 90 ]
+        elements:
+          Shape:
+            geometry: { type: Cylinder, radius: 0.05, height: 0.1 }
+        appearance: *DARKGRAY
+  -
+
+    name: Foot_R
+    parent: FOOT link_R
+    translation : [ 0, 0, 0]
+    jointId: 5
+    jointType: revolute
+    jointAxis: X
+    jointRange: [ -45, 45]
+    centerOfMass: [ -0.00988046,0.00007018,-0.00984470 ]
+    mass: 0.317276
+    inertia: [
+      0.00042135,0.00000355,-0.00001115,
+      0.00000355,0.00055372,0.00000053,
+      -0.00001115,0.00000053,0.00054913
+      
+       ]
+    elements:
+      Shape:
+        geometry: { type: Resource, uri: "meshes/Foot-Right.STL" }
+        appearance: *DARKGRAY  
+  -
+    name: TORSO
+    parent: WAIST
+    translation : [ 0, 0, 0.1056272]
+    jointId: 20
+    jointType: revolute
+    jointAxis: -Y
+    jointRange: [ -30, 20]
+    centerOfMass: [ 0.01094, 0.00068 , 0.14346 ]
+    mass: 14.5
+    inertia: [
+      0.286618, 0.0004983, 0.011415,
+      0.0004983, 0.23311, 0.0003639,
+      0.011415 ,0.0003639, 0.19874
+       ]
+    elements:
+      Shape:
+        geometry: { type: Resource, uri: "meshes/tORSO.STL" }
+        appearance: *DARKGRAY    
+  -
+
+    name: upper arm pitch link_L
+    parent: TORSO
+    translation : [ 0, 0.21506177, 0.30609504045 ]
+    jointId: 6
+    jointType: revolute
+    jointAxis: [0,0.9848,0.1737]
+    jointRange: [ -30, +30 ]
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 0.001075
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    elements:
+      Transform:
+        rotation: [ 1, 0, 0, 10 ]
+        elements:
+          Shape:
+            geometry: { type: Cylinder, radius: 0.04, height: 0.1 }
+        appearance: *DARKGRAY
+  -        
+    name: Upper ARM_L
+    parent: upper arm pitch link_L
+    translation : [ 0, 0.01, 0.01]
+    jointId: 7
+    jointType: revolute
+    jointAxis: X
+    jointRange: [ -30, 20]
+    centerOfMass: [-0.0011,-0.00994,-0.0599 ]
+    #450+121
+    mass: 0.571
+    inertia: [
+      0.002694,  -0.00001928, 0.0001016,
+     -0.00001928, 0.00269614,-0.0006172,
+      0.0001016, -0.0006172 , 0.0006975
+       ]
+    elements:
+      Transform:
+        rotation: [ 1, 0, 0, 10 ]
+        elements:
+          Shape:
+            geometry: { type: Resource, uri: "meshes/Upper-arm-Left.STL" }
+        appearance: *DARKGRAY
+  -
+    name: FOREARM_L
+    parent: Upper ARM_L
+    translation : [ 0, 0.044106, -0.254]
+    jointId: 8
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ -30, 20]
+    centerOfMass: [ -0.00055,0.008933,-0.11242]
+    # 129+485
+    mass: 0.614
+    inertia: [
+       0.005026, -0.00000869,0.00006316,
+     -0.00000869, 0.005026, -0.0004149,
+      0.00006316, -0.0004149, 0.00031064
+      
+      ]
+    elements:
+      Transform:
+        rotation: [ 1, 0, 0, 10 ]
+        elements:
+          Shape:
+            geometry: { type: Resource, uri: "meshes/fore-arm-Left.STL" }
+        appearance: *DARKGRAY
+  -
+    name: HAND_L
+    parent: FOREARM_L
+    translation : [ 0, 0.064622, -0.3665090]
+    jointId: 9
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ -30, 20]
+    centerOfMass: [ 0.0054334208830912611, -0.0045557250577152588, -0.022327982304852591 ]
+    mass: 0.01307
+    inertia: [
+      7.8215085179879079e-06, -1.9125278185636929e-07, -8.0678174194219455e-07,
+      -1.9125278185636929e-07, 5.3468754380240647e-06, -3.1722504110141287e-07,
+      -8.0678174194219455e-07, -3.1722504110141287e-07, 3.7864977034795684e-06 ]
+    elements:
+      Transform:
+        rotation: [ 1, 0, 0, 10 ]
+        elements:
+          Shape:
+            geometry: { type: Resource, uri: "meshes/Hand-Left.STL" }
+        appearance: *DARKGRAY
+  -    
+
+
+    name: upper arm pitch link_R
+    parent: TORSO
+    translation : [ 0, -0.21506177, 0.30609504045 ]
+    jointId: 10
+    jointType: revolute
+    jointAxis: [0,-0.9848,0.1737]
+    jointRange: [ -30, +30 ]
+    centerOfMass: [ 0, 0, 0 ]
+    mass: 0.01075
+    inertia: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1 ]
+    elements:
+      Transform:
+        rotation: [ 1, 0, 0, -10 ]
+        elements:
+          Shape:
+            geometry: { type: Cylinder, radius: 0.04, height: 0.1 }
+        appearance: *DARKGRAY
+  -               
+    name: Upper ARM_R
+    parent: upper arm pitch link_R
+    translation : [ 0, -0.01, 0.01]
+    jointId: 11
+    jointType: revolute
+    jointAxis: -Y
+    jointRange: [ -30, 20]
+    centerOfMass: [ -0.0011,0.00994,-0.0599 ]
+    mass: 0.571
+    inertia: [
+      0.002694,0.00001928, 0.0001016,
+      0.00001928,0.00269614,0.0006172,
+      0.0001016,0.0006172,0.0006975
+       ]
+    elements:
+      Transform:
+        rotation: [ 1, 0, 0, -10 ]
+        elements:
+          Shape:
+            geometry: { type: Resource, uri: "meshes/Upper-arm-right.STL" }
+        appearance: *DARKGRAY
+  -
+    name: FOREARM_R
+    parent: Upper ARM_R
+    translation : [ 0, -0.04, -0.254]
+    jointId: 12
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ -30, 20]
+    centerOfMass: [ -0.00055,-0.008933,-0.11242 ]
+    mass: 0.614
+    inertia: [
+      0.005026, 0.00000869,0.00006316,
+      0.00000869, 0.005026, 0.0004149,
+      0.00006316, 0.0004149, 0.00031064
+       ]
+    elements:
+      Transform:
+        rotation: [ 1, 0, 0, -10 ]
+        elements:
+          Shape:
+            geometry: { type: Resource, uri: "meshes/fore-arm-right.STL" }
+        appearance: *DARKGRAY
+  -
+    name: HAND_R
+    parent: FOREARM_R
+    translation : [ 0, -0.064, -0.35]
+    jointId: 19
+    jointType: revolute
+    jointAxis: Y
+    jointRange: [ -30, 20]
+    centerOfMass: [ 0.0054334208830912611, -0.0045557250577152588, -0.022327982304852591 ]
+    mass: 0.01307
+    inertia: [
+      7.8215085179879079e-06, -1.9125278185636929e-07, -8.0678174194219455e-07,
+      -1.9125278185636929e-07, 5.3468754380240647e-06, -3.1722504110141287e-07,
+      -8.0678174194219455e-07, -3.1722504110141287e-07, 3.7864977034795684e-06 ]
+    elements:
+      Transform:
+        rotation: [ 1, 0, 0, -10 ]
+        elements:
+          Shape:
+            geometry: { type: Resource, uri: "meshes/Hand-Right.STL" }
+        appearance: *DARKGRAY
+   
+linkGroup:
+  
+  - name: UPPER-BODY
+    links:
+      - TORSO
+      - name: ARMS
+        links:
+          - name: R-ARM
+            links: [ upper arm pitch link_R,Upper ARM_R,FOREARM_R,HAND_R ]
+          - name: L-ARM
+            links: [ upper arm pitch link_L,Upper ARM_L,FOREARM_L ,HAND_L]
+  - WAIST
+  - name: LEGS
+    links:
+      - name: R-LEG
+        links: [yaw link_R,roll link_R,THIGH_R,SHANK_R, FOOT link_R,FOOT_R]
+      - name: L-LEG
+        links: [yaw link_L,roll link_L,THIGH_L,SHANK_L, FOOT link_L,FOOT_L]
+
+footLinks:
+  - link: FOOT_R
+    soleCenter: [ 0.05, 0.0, -0.055 ]
+  - link: FOOT_L
+    soleCenter: [ 0.05, 0.0, -0.055 ]
+
+defaultIKsetup:
+  WAIST: [ FOOT_R, FOOT_L ]
+  RLEG_ANKLE_R: [ WAIST ]
+  LLEG_ANKLE_R: [ WAIST ]
+
+possibleIkInterpolationLinks: [ WAIST, FOOT_R, FOOT_L ]
+defaultIkInterpolationLinks: [ WAIST, FOOT_R, FOOT_L ]
+possileSupportLinks: [ FOOT_R, FOOT_L ]
+
+collisionDetection:
+  excludeTreeDepth: 3
+  excludeLinks: [ ]
+   
